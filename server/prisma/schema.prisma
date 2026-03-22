@@ -6,18 +6,35 @@
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
-} 
+}
 
 datasource db {
   provider = "postgresql"
 }
 
 model Release {
-  id             String   @id @default(uuid())
+  id             String            @id @default(uuid())
   name           String
   date           DateTime
-  status         String   @default("planned")
+  status         String            @default("planned")
   additionalInfo String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  checklist      ReleaseChecklist?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model ReleaseChecklist {
+  id                   String   @id @default(uuid())
+  releaseId            String   @unique
+  prMerged             Boolean  @default(false)
+  changelogUpdated     Boolean  @default(false)
+  testsPassing         Boolean  @default(false)
+  githubReleaseCreated Boolean  @default(false)
+  deployedToDemo       Boolean  @default(false)
+  testedInDemo         Boolean  @default(false)
+  deployedToProd       Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  release Release @relation(fields: [releaseId], references: [id], onDelete: Cascade)
 }
