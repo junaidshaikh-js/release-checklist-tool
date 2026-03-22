@@ -8,8 +8,8 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "prisma generate && tsc",
-    "start": "prisma migrate deploy && node ./dist/index.js",
+    "build": "prisma generate && tsc && prisma migrate deploy",
+    "start": "node ./dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
