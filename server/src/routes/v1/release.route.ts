@@ -1,5 +1,5 @@
 import express from 'express';
-import { getReleases, createRelease, getReleaseById, updateRelease } from '../../controllers/release.controller';
+import { getReleases, createRelease, getReleaseById, updateRelease } from '../../controllers/release.controller.js';
 
 const router = express.Router();
 

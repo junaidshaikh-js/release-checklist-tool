@@ -1,5 +1,5 @@
 import express from 'express';
-import releaseRoute from './release.route';
+import releaseRoute from './release.route.js';
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express'
-import { prisma } from '../lib/PrismaClient'
+import { prisma } from '../lib/PrismaClient.js'
 
 export const getReleases = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
