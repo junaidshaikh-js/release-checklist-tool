@@ -41,3 +41,25 @@ export const createRelease = async (req: Request, res: Response, next: NextFunct
     next(error)
   }
 }
+
+export const getReleaseById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { id } = req.params
+
+    const release = await prisma.release.findUnique({
+      where: { id: id as string },
+      include: {
+        checklist: true,
+      },
+    })
+
+    if (!release) {
+      res.status(404).json({ error: 'Release not found' })
+      return
+    }
+
+    res.status(200).json(release)
+  } catch (error) {
+    next(error)
+  }
+}
