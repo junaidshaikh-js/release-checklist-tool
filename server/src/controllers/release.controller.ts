@@ -17,17 +17,17 @@ export const getReleases = async (_req: Request, res: Response, next: NextFuncti
 
 export const createRelease = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const { name, date, additionalInfo } = req.body
+    const { name, additionalInfo } = req.body
 
-    if (!name || !date) {
-      res.status(400).json({ error: 'Name and date are required fields.' })
+    if (!name) {
+      res.status(400).json({ error: 'Name is required.' })
       return
     }
 
     const newRelease = await prisma.release.create({
       data: {
         name,
-        date: new Date(date),
+        date: new Date(),
         status: 'planned',
         additionalInfo: additionalInfo || null,
         checklist: {
