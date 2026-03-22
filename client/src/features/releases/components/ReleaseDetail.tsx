@@ -41,10 +41,48 @@ export function ReleaseDetail({ release }: Props) {
 
   const handleSave = async () => {
     setIsSaving(true)
-    // Simulate save or actually call API if needed later. 
-    // User only asked for UI for now but added a 'Save' button in screenshot.
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsSaving(false)
+    try {
+      const completedCount = Object.values(checklist).filter(Boolean).length
+      const totalCount = checklistItems.length
+      
+      let status = "planned"
+      if (completedCount === totalCount) {
+        status = "done"
+      } else if (completedCount > 0) {
+        status = "ongoing"
+      }
+
+      const checklistPayload = Object.fromEntries(
+        Object.entries(checklist).filter(([key]) => 
+          checklistItems.some(item => item.field === key)
+        )
+      )
+
+      const response = await fetch(`http://localhost:3001/api/v1/releases/${release.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          date: new Date(date).toISOString(),
+          status,
+          additionalInfo,
+          checklist: checklistPayload,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save changes")
+      }
+      
+      // Optionally could re-fetch or show success state
+    } catch (error) {
+      console.error("Error saving release:", error)
+      alert("Failed to save changes. Please try again.")
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const checklistItems = [

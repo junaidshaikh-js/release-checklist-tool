@@ -63,3 +63,46 @@ export const getReleaseById = async (req: Request, res: Response, next: NextFunc
     next(error)
   }
 }
+
+export const updateRelease = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { id } = req.params
+    const { name, date, status, additionalInfo, checklist } = req.body
+
+    const updateData: {
+      name?: string
+      date?: Date
+      status?: string
+      additionalInfo?: string | null
+      checklist?: {
+        update: Record<string, boolean>
+      }
+    } = {}
+
+    if (name) updateData.name = name
+    if (status) updateData.status = status
+    if (additionalInfo !== undefined) updateData.additionalInfo = additionalInfo
+    if (date) updateData.date = new Date(date)
+    if (checklist) {
+      updateData.checklist = {
+        update: checklist,
+      }
+    }
+
+    const updatedRelease = await prisma.release.update({
+      where: { id: id as string },
+      data: updateData,
+      include: {
+        checklist: true,
+      },
+    })
+
+    res.status(200).json(updatedRelease)
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'code' in error && (error as { code: string }).code === 'P2025') {
+      res.status(404).json({ error: 'Release not found' })
+      return
+    }
+    next(error)
+  }
+}
