@@ -3,7 +3,7 @@ import { Release } from "../features/releases/types"
 
 async function getReleases(): Promise<Release[]> {
   try {
-    const res = await fetch("http://localhost:3001/api/v1/releases", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/releases`, {
       cache: "no-store",
     });
     

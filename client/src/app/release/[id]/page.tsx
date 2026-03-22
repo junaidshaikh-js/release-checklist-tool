@@ -8,7 +8,7 @@ interface Props {
 
 async function getRelease(id: string): Promise<Release | null> {
   try {
-    const res = await fetch(`http://localhost:3001/api/v1/releases/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/releases/${id}`, {
       cache: "no-store",
     })
 

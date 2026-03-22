@@ -65,7 +65,7 @@ export function ReleaseDetail({ release }: Props) {
         Object.entries(checklist).filter(([key]) => checklistItems.some(item => item.field === key)),
       )
 
-      const response = await fetch(`http://localhost:3001/api/v1/releases/${release.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/releases/${release.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -31,7 +31,7 @@ export function NewReleaseModal({ isOpen, onClose, onSuccess }: Props) {
     setError(null)
 
     try {
-      const res = await fetch("http://localhost:3001/api/v1/releases", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/releases`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
