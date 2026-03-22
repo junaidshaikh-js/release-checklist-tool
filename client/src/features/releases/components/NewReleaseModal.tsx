@@ -12,6 +12,7 @@ interface Props {
 
 export function NewReleaseModal({ isOpen, onClose, onSuccess }: Props) {
   const [name, setName] = useState("")
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
   const [additionalInfo, setAdditionalInfo] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -19,6 +20,10 @@ export function NewReleaseModal({ isOpen, onClose, onSuccess }: Props) {
   const handleSubmit = async () => {
     if (!name.trim()) {
       setError("Name is required.")
+      return
+    }
+    if (!date) {
+      setError("Date is required.")
       return
     }
 
@@ -31,7 +36,7 @@ export function NewReleaseModal({ isOpen, onClose, onSuccess }: Props) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, additionalInfo }),
+        body: JSON.stringify({ name, date, additionalInfo }),
       })
 
       if (!res.ok) {
@@ -40,6 +45,7 @@ export function NewReleaseModal({ isOpen, onClose, onSuccess }: Props) {
       }
 
       setName("")
+      setDate(new Date().toISOString().split('T')[0])
       setAdditionalInfo("")
       onSuccess()
     } catch (err) {
@@ -64,6 +70,16 @@ export function NewReleaseModal({ isOpen, onClose, onSuccess }: Props) {
             placeholder="e.g. Version 1.0.1" 
             value={name}
             onChange={(e) => setName(e.target.value)}
+            disabled={isLoading}
+          />
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="date" className="text-sm font-medium text-slate-700">Date</label>
+          <Input 
+            id="date" 
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             disabled={isLoading}
           />
         </div>
